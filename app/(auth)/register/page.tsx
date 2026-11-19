@@ -41,18 +41,24 @@ function GoogleIcon() {
     )
 }
 
- export default function RegisterPage() {
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+export default function RegisterPage() {
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         const formData = new FormData(event.currentTarget)
-        const user = Object.fromEntries(formData.entries())
-        const {data , error} = await authClient.signUp.email({
-            name: user.fullName as string,
-            email: user.email as string,
-            password: user.password as string,
-            image: user.photoUrl as string,
-            
-           
+        const user = Object.fromEntries(formData.entries()) as {
+            fullName: string
+            email: string
+            password: string
+            photoUrl: string
+            role: "customer" | "owner" | "admin"
+        }
+        console.log("Register form data:", user)
+        const { data, error } = await authClient.signUp.email({
+            name: user.fullName,
+            email: user.email,
+            password: user.password,
+            image: user.photoUrl,
+            role: user.role,
         })
         if (error) {
             console.error("Error signing up:", error)
@@ -116,7 +122,7 @@ function GoogleIcon() {
                         htmlFor="photoUrl"
                         className="text-[13px] font-semibold text-foreground"
                     >
-                        Photo URL (imgbb / Direct Image Link)
+                        Photo URL 
                     </label>
                     <input
                         id="photoUrl"
@@ -163,6 +169,8 @@ function GoogleIcon() {
                         autoComplete="new-password"
                         required
                         minLength={6}
+                        pattern="^(?=.*[a-z])(?=.*[A-Z]).{6,}$"
+                        title="Password must contain at least one uppercase letter, one lowercase letter, and 6 characters."
                         placeholder="••••••••"
                         className="h-10 w-full rounded-lg border border-border bg-muted px-3.5 text-sm outline-none transition placeholder:text-muted-foreground/70 focus:border-teal-500 focus:ring-3 focus:ring-teal-500/15"
                     />
