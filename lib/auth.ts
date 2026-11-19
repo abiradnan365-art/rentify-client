@@ -6,9 +6,18 @@ const client = new MongoClient(process.env.BETTER_AUTH_DB_URI as string);
 const db = client.db('rentifydb');
 
 export const auth = betterAuth({
-    
+
     emailAndPassword: {
         enabled: true,
+    },
+
+    user: {
+        additionalFields: {
+            role: {
+                type: "string",
+                input: false
+            }
+        }
     },
 
     socialProviders: {
