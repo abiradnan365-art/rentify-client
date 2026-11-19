@@ -6,6 +6,7 @@ import { HardHat, Menu, X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { authClient } from "@/lib/auth-client"
+import { Button } from "@base-ui/react"
 
 const links = [
   { label: "Home", href: "/", active: true },
@@ -15,8 +16,13 @@ const links = [
 ]
 
 export function Navbar() {
- 
+
   const [open, setOpen] = useState(false)
+  const { data: session } = authClient.useSession()
+  console.log("Session data:", session)
+  const handleLogout = async () => {
+    await authClient.signOut()
+  }
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/90 backdrop-blur">
@@ -52,20 +58,38 @@ export function Navbar() {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-6 sm:flex">
-          <Link
-            href="/login"
-            className="text-sm font-medium transition-colors hover:text-teal-600"
-          >
-            Login
-          </Link>
-          <Link
-            href="/register"
-            className="rounded-lg bg-teal-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-teal-700 focus-visible:ring-3 focus-visible:ring-teal-600/30 focus-visible:outline-none"
-          >
-            Register
-          </Link>
-        </div>
+        {
+          session?.user ?
+            <>
+              <div className="flex items-center gap-3">
+                <span className=" font-semibold">
+                  {session.user.name}
+                </span>
+                <Button
+                onClick={handleLogout}
+                  className="rounded-lg bg-red-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-red-700 focus-visible:ring-3 focus-visible:ring-teal-600/30 focus-visible:outline-none"
+                >
+                  Logout
+                </Button>
+              </div>
+            </>
+            : <>
+              <div className="hidden items-center gap-6 sm:flex">
+                <Link
+                  href="/login"
+                  className="text-sm font-medium transition-colors hover:text-teal-600"
+                >
+                  Login
+                </Link>
+                <Link
+                  href="/register"
+                  className="rounded-lg bg-teal-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-teal-700 focus-visible:ring-3 focus-visible:ring-teal-600/30 focus-visible:outline-none"
+                >
+                  Register
+                </Link>
+              </div>
+            </>
+        }
 
         <button
           type="button"
