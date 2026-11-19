@@ -4,6 +4,9 @@ import type { FormEvent } from "react"
 import Link from "next/link"
 import { ChevronDown, Circle } from "lucide-react"
 
+import { authClient } from "@/lib/auth-client"
+import { redirect } from "next/navigation"
+
 const passwordHints = [
     "At least one uppercase letter (A-Z)",
     "At least one lowercase letter (a-z)",
@@ -38,11 +41,24 @@ function GoogleIcon() {
     )
 }
 
-export default function RegisterPage() {
-    function handleSubmit(event: FormEvent<HTMLFormElement>) {
+ export default function RegisterPage() {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         const formData = new FormData(event.currentTarget)
-        console.log("Register form data:", Object.fromEntries(formData.entries()))
+        const user = Object.fromEntries(formData.entries())
+        const {data , error} = await authClient.signUp.email({
+            name: user.fullName as string,
+            email: user.email as string,
+            password: user.password as string,
+            image: user.photoUrl as string,
+            
+           
+        })
+        if (error) {
+            console.error("Error signing up:", error)
+        } else {
+            redirect("/")
+        }
     }
 
     return (

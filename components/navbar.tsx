@@ -5,6 +5,7 @@ import Link from "next/link"
 import { HardHat, Menu, X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { authClient } from "@/lib/auth-client"
 
 const links = [
   { label: "Home", href: "/", active: true },
@@ -14,6 +15,7 @@ const links = [
 ]
 
 export function Navbar() {
+ 
   const [open, setOpen] = useState(false)
 
   return (

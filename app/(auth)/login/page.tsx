@@ -2,6 +2,8 @@
 
 import { useState, type FormEvent } from "react"
 import Link from "next/link"
+import { authClient } from "@/lib/auth-client"
+import { redirect } from "next/navigation"
 
 
 
@@ -9,10 +11,20 @@ export default function LoginPage() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
-    function handleSubmit(event: FormEvent<HTMLFormElement>) {
+   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
         const formData = new FormData(event.currentTarget)
-        console.log("Login form data:", Object.fromEntries(formData.entries()))
+        const user = Object.fromEntries(formData.entries()) as { email: string; password: string }
+        const { data, error } = await authClient.signIn.email({
+            email: user.email,
+            password: user.password,
+        })
+        if (error) {
+            console.error("Error signing in:", error)
+        } else {
+            redirect("/")
+        }
+        console.log("Login form data:", user)
     }
 
 
