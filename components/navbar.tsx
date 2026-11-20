@@ -56,9 +56,18 @@ export function Navbar() {
               {link.label}
             </Link>
           ))}
+          {session?.user && (
+            <Link
+              href={`dashboard/${session.user.role}`}
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-teal-600"
+            >
+              Dashboard
+            </Link>
+          )}
         </nav>
 
         {session?.user ? (
+
           <div className="hidden items-center gap-3 sm:flex">
             <div className="flex items-center gap-2.5 rounded-full border border-slate-200 bg-slate-50/80 py-1 pr-4 pl-1.5 shadow-2xs">
               <Avatar className="size-9 border border-teal-500/50">
@@ -82,7 +91,7 @@ export function Navbar() {
               </div>
             </div>
 
-            
+
             <Button
               type="button"
               onClick={handleLogout}
