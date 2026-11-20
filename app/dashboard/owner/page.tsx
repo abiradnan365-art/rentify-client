@@ -2,7 +2,7 @@ import React from 'react';
 
 const OwnerDashboardPage = () => {
     return (
-        <div>
+        <div className="ml-10">
             <h1 className="text-2xl font-bold mb-4">Owner Dashboard</h1>
             <p>Welcome to the owner dashboard! Here you can manage your properties, view rental information, and perform other owner-specific tasks.</p>
         </div>

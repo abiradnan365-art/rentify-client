@@ -71,13 +71,13 @@ const menuItemsByRole: Record<DashboardRole, DashboardMenuItem[]> = {
     {
       id: "owner-add-equipment",
       name: "Add Equipment",
-      url: "/dashboard/owner/equipment/new",
+      url: "/dashboard/owner/equipments/new",
       icon: CirclePlus,
     },
     {
       id: "owner-equipment",
       name: "My Equipment",
-      url: "/dashboard/owner/equipment",
+      url: "/dashboard/owner/equipments",
       icon: Package,
     },
     {
