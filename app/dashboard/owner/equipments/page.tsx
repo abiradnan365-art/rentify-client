@@ -12,11 +12,12 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { cn } from "@/lib/utils"
+import { getEquipments } from "@/lib/api/jobs"
 
 type EquipmentStatus = "Approved" | "Pending"
 
 type Equipment = {
-  id: string
+  _id: string
   name: string
   category: string
   rentalPrice: number
@@ -24,54 +25,6 @@ type Equipment = {
   quantity: number
   status: EquipmentStatus
 }
-
-const equipment: Equipment[] = [
-  {
-    id: "cat-320-gc",
-    name: "CAT 320 GC Hydraulic Excavator",
-    category: "Construction Equipment",
-    rentalPrice: 450,
-    rentalType: "Daily",
-    quantity: 3,
-    status: "Approved",
-  },
-  {
-    id: "red-v-raptor-8k",
-    name: "RED V-Raptor 8K VV Cinema Camera Kit",
-    category: "Photography Equipment",
-    rentalPrice: 280,
-    rentalType: "Daily",
-    quantity: 4,
-    status: "Approved",
-  },
-  {
-    id: "john-deere-5075e",
-    name: "John Deere 5075E Utility Tractor",
-    category: "Agriculture Equipment",
-    rentalPrice: 920,
-    rentalType: "Weekly",
-    quantity: 5,
-    status: "Approved",
-  },
-  {
-    id: "l-acoustics-kara-ii",
-    name: "L-Acoustics Kara II Line Array Sound Rig",
-    category: "Event & AV Equipment",
-    rentalPrice: 3200,
-    rentalType: "Monthly",
-    quantity: 1,
-    status: "Approved",
-  },
-  {
-    id: "sony-fx9-xdcam",
-    name: "Sony FX9 XDCAM 6K Full-Frame Run & Gun Kit",
-    category: "Photography Equipment",
-    rentalPrice: 165,
-    rentalType: "Daily",
-    quantity: 2,
-    status: "Pending",
-  },
-]
 
 function StatusBadge({ status }: { status: EquipmentStatus }) {
   return (
@@ -126,7 +79,10 @@ function EquipmentActions({
   )
 }
 
-const ManageEquipmentsPage = () => {
+const ManageEquipmentsPage = async () => {
+  const equipment: Equipment[] = await getEquipments({})
+  console.log("Fetched equipment:", equipment) 
+
   return (
     <div className="p-4 sm:p-6 lg:p-8">
       <Card className="mx-auto w-full max-w-5xl gap-0 p-4 shadow-sm sm:p-6">
@@ -177,7 +133,7 @@ const ManageEquipmentsPage = () => {
 
             <TableBody>
               {equipment.map((item) => (
-                <TableRow key={item.id} className="hover:bg-transparent">
+                <TableRow key={item._id} className="hover:bg-transparent">
                   <TableCell className="max-w-[220px] py-5 pl-3 font-bold whitespace-normal">
                     {item.name}
                   </TableCell>
@@ -212,7 +168,7 @@ const ManageEquipmentsPage = () => {
         <div className="mt-6 space-y-3 lg:hidden">
           {equipment.map((item) => (
             <div
-              key={item.id}
+              key={item._id}
               className="rounded-lg border border-border p-4"
             >
               <div className="flex items-start justify-between gap-3">
