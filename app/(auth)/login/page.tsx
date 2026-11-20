@@ -11,7 +11,7 @@ export default function LoginPage() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
-   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
         const formData = new FormData(event.currentTarget)
         const user = Object.fromEntries(formData.entries()) as { email: string; password: string }
@@ -27,6 +27,12 @@ export default function LoginPage() {
         console.log("Login form data:", user)
     }
 
+    const handleGoogleSignIn = async () => {
+        const data = await authClient.signIn.social({
+            provider: "google",
+        });
+        console.log("Google sign-in data:", data);
+    }
 
 
     return (
@@ -44,7 +50,7 @@ export default function LoginPage() {
                 <p className="text-center text-[11px] font-bold tracking-[0.06em] text-teal-800 uppercase">
                     Please Login Rentify
                 </p>
-              
+
             </div>
 
             <form onSubmit={handleSubmit} className="mt-6 space-y-4">
@@ -104,7 +110,7 @@ export default function LoginPage() {
 
             <button
                 type="button"
-                onClick={() => console.log("Continue with Google (Customer) clicked")}
+                onClick={handleGoogleSignIn}
                 className="flex h-10 w-full items-center justify-center gap-2.5 rounded-lg border border-border bg-background text-sm font-semibold transition-colors hover:bg-muted/60 focus-visible:ring-3 focus-visible:ring-teal-600/20 focus-visible:outline-none"
             >
                 <GoogleIcon />

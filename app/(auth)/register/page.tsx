@@ -66,6 +66,12 @@ export default function RegisterPage() {
             redirect("/")
         }
     }
+    const handleGoogleSignUp = async () => {
+        const data = await authClient.signIn.social({
+            provider: "google",
+        });
+        console.log("Google sign-in data:", data);
+    }
 
     return (
         <div className="w-full max-w-[26rem] rounded-2xl bg-background p-8 shadow-xl shadow-black/5 ring-1 ring-black/5 sm:p-10">
@@ -122,7 +128,7 @@ export default function RegisterPage() {
                         htmlFor="photoUrl"
                         className="text-[13px] font-semibold text-foreground"
                     >
-                        Photo URL 
+                        Photo URL
                     </label>
                     <input
                         id="photoUrl"
@@ -202,7 +208,7 @@ export default function RegisterPage() {
                 </div>
                 <button
                     type="button"
-                    onClick={() => console.log("Continue with Google (Customer) clicked")}
+                    onClick={handleGoogleSignUp}
                     className="flex h-10 w-full items-center justify-center gap-2.5 rounded-lg border border-border bg-background text-sm font-semibold transition-colors hover:bg-muted/60 focus-visible:ring-3 focus-visible:ring-teal-600/20 focus-visible:outline-none"
                 >
                     <GoogleIcon />

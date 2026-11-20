@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { HardHat, Menu, X } from "lucide-react"
-
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { cn } from "@/lib/utils"
 import { authClient } from "@/lib/auth-client"
 import { Button } from "@base-ui/react"
@@ -58,38 +58,70 @@ export function Navbar() {
           ))}
         </nav>
 
-        {
-          session?.user ?
-            <>
-              <div className="flex items-center gap-3">
-                <span className=" font-semibold">
+        {session?.user ? (
+          <div className="hidden items-center gap-3 sm:flex">
+            <div className="flex items-center gap-2.5 rounded-full border border-slate-200 bg-slate-50/80 py-1 pr-4 pl-1.5 shadow-2xs">
+              <Avatar className="size-9 border border-teal-500/50">
+                <AvatarImage
+                  src={session.user.image ?? undefined}
+                  alt={session.user.name ?? "User"}
+                  className="object-cover"
+                />
+                <AvatarFallback className="bg-teal-50 text-xs font-semibold text-teal-700">
+                  {session.user.name?.charAt(0)?.toUpperCase() || "U"}
+                </AvatarFallback>
+              </Avatar>
+
+              <div className="flex flex-col leading-tight">
+                <span className="text-xs font-bold text-slate-800 sm:text-sm">
                   {session.user.name}
                 </span>
-                <Button
-                onClick={handleLogout}
-                  className="rounded-lg bg-red-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-red-700 focus-visible:ring-3 focus-visible:ring-teal-600/30 focus-visible:outline-none"
-                >
-                  Logout
-                </Button>
+                <span className="text-[11px] font-semibold text-emerald-700">
+                  {session.user.role ?? "Customer"}
+                </span>
               </div>
-            </>
-            : <>
-              <div className="hidden items-center gap-6 sm:flex">
-                <Link
-                  href="/login"
-                  className="text-sm font-medium transition-colors hover:text-teal-600"
-                >
-                  Login
-                </Link>
-                <Link
-                  href="/register"
-                  className="rounded-lg bg-teal-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-teal-700 focus-visible:ring-3 focus-visible:ring-teal-600/30 focus-visible:outline-none"
-                >
-                  Register
-                </Link>
-              </div>
-            </>
-        }
+            </div>
+
+            
+            <Button
+              type="button"
+              onClick={handleLogout}
+              className="flex h-auto items-center gap-2 rounded-full border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-2xs transition-colors hover:border-red-200 hover:bg-red-50 hover:text-red-600 focus-visible:ring-2 focus-visible:ring-red-500/30 focus-visible:outline-none"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="size-4 text-slate-600 transition-colors group-hover:text-red-600"
+              >
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+              </svg>
+              <span>Logout</span>
+            </Button>
+          </div>
+        ) : (
+          <div className="hidden items-center gap-6 sm:flex">
+            <Link
+              href="/login"
+              className="text-sm font-medium transition-colors hover:text-teal-600"
+            >
+              Login
+            </Link>
+
+            <Link
+              href="/register"
+              className="rounded-lg bg-teal-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-teal-700 focus-visible:ring-3 focus-visible:ring-teal-600/30 focus-visible:outline-none"
+            >
+              Register
+            </Link>
+          </div>
+        )}
 
         <button
           type="button"
