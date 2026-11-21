@@ -10,3 +10,13 @@ export const createEquipment = async (data: Record<string, unknown>) => {
     });
     return res.json();
 };
+
+export const deleteEquipment = async (equipmentId: string) => {
+    const res = await fetch(`${BASE_URL}/equipments/${equipmentId}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+    return res.json();
+};

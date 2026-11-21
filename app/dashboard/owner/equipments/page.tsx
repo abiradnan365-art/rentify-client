@@ -13,10 +13,11 @@ import {
 } from "@/components/ui/table"
 import { cn } from "@/lib/utils"
 import { getEquipments } from "@/lib/api/jobs"
+import { DeleteEquipmentDialog } from "@/app/components/DeleteEquipmentDialog"
 
 type EquipmentStatus = "Approved" | "Pending"
 
-type Equipment = {
+export type Equipment = {
   _id: string
   name: string
   category: string
@@ -42,8 +43,10 @@ function StatusBadge({ status }: { status: EquipmentStatus }) {
 }
 
 function EquipmentActions({
+  equipment,
   layout = "stacked",
 }: {
+  equipment: Equipment
   layout?: "stacked" | "inline"
 }) {
   return (
@@ -66,14 +69,7 @@ function EquipmentActions({
         >
           Update
         </Button>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          className="border-rose-200 bg-rose-50 px-3 text-rose-600 hover:bg-rose-100 hover:text-rose-700"
-        >
-          Delete
-        </Button>
+        <DeleteEquipmentDialog equipment={equipment} />
       </div>
     </div>
   )
@@ -81,7 +77,7 @@ function EquipmentActions({
 
 const ManageEquipmentsPage = async () => {
   const equipment: Equipment[] = await getEquipments({})
-  console.log("Fetched equipment:", equipment) 
+  console.log("Fetched equipment:", equipment)
 
   return (
     <div className="p-4 sm:p-6 lg:p-8">
@@ -156,7 +152,7 @@ const ManageEquipmentsPage = async () => {
 
                   <TableCell className="py-4 pr-3">
                     <div className="flex justify-end">
-                      <EquipmentActions />
+                      <EquipmentActions equipment={item} />
                     </div>
                   </TableCell>
                 </TableRow>
@@ -191,7 +187,7 @@ const ManageEquipmentsPage = async () => {
               </div>
 
               <div className="mt-3 flex justify-end">
-                <EquipmentActions layout="inline" />
+                <EquipmentActions equipment={item} layout="inline" />
               </div>
             </div>
           ))}
