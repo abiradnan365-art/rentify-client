@@ -9,9 +9,9 @@ import { authClient } from "@/lib/auth-client"
 import { Button } from "@base-ui/react"
 
 const links = [
-  { label: "Home", href: "/", active: true },
+  { label: "Home", href: "/", active: false },
   { label: "About Us", href: "/about" },
-  { label: "All Equipment", href: "/equipment" },
+  { label: "All Equipment", href: "/browse-equipments" },
   { label: "How It Works", href: "/how-it-works" },
 ]
 

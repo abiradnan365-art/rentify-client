@@ -1,4 +1,5 @@
 import Image from "next/image"
+import Link from "next/link"
 import { ChevronRight, Heart, ImageOff, MapPin } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -89,7 +90,10 @@ export function EquipmentBrowseCard({ equipment }: { equipment: Equipment }) {
           </p>
 
           <Button
-            type="button"
+            render={
+              <Link href={`/browse-equipments/${equipment._id}`} />
+            }
+            nativeButton={false}
             className="rounded-full bg-teal-600 px-4 text-white hover:bg-teal-700"
           >
             View Details

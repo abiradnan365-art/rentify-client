@@ -8,6 +8,9 @@ export const EQUIPMENT_CATEGORIES = [
   "Photography Equipment",
   "Vehicles & Transportation",
   "Agriculture Equipment",
+  "Electrical Equipment",
+  "Medical Equipment",
+  "Industrial Equipment",
   "Event & AV Equipment",
 ] as const
 
@@ -18,6 +21,11 @@ export const RENTAL_TYPES = ["Hourly", "Daily", "Weekly", "Monthly"] as const
 export type RentalType = (typeof RENTAL_TYPES)[number]
 
 export type EquipmentStatus = "Approved" | "Pending"
+
+export type EquipmentOwner = {
+  name: string
+  email: string
+}
 
 export type Equipment = {
   _id: string
@@ -34,6 +42,7 @@ export type Equipment = {
   description?: string
   rentalTerms?: string
   images?: string[]
+  owner?: EquipmentOwner
   status: EquipmentStatus
   createdAt?: string
 }
