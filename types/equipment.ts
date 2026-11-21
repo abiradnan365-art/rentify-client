@@ -8,14 +8,6 @@ export const EQUIPMENT_CATEGORIES = [
   "Photography Equipment",
   "Vehicles & Transportation",
   "Agriculture Equipment",
-  "Electronics & Technology",
-  "Medical Equipment",
-  "Industrial Equipment",
-  "Sports & Fitness Equipment",
-  "Musical Instruments",
-  "Camping & Outdoor Equipment",
-  "Tools & Machinery",
-  "Party & Event Supplies",
   "Event & AV Equipment",
 ] as const
 
@@ -30,11 +22,20 @@ export type EquipmentStatus = "Approved" | "Pending"
 export type Equipment = {
   _id: string
   name: string
-  category: EquipmentCategory
+  // The API can hold categories beyond the form presets.
+  category: string
+  brand?: string
+  model?: string
   rentalPrice: number
   rentalType: RentalType
+  location?: string
   quantity: number
+  condition?: string
+  description?: string
+  rentalTerms?: string
+  images?: string[]
   status: EquipmentStatus
+  createdAt?: string
 }
 
 export type UploadedImage = {
