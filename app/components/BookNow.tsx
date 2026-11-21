@@ -30,7 +30,7 @@ const BookNow = ({ equipment}: BookNowProps) => {
             }
 
             const result = await bookingToAEquipment(booking);
-            if (result.insertedId) {
+            if (typeof result === 'object' && result !== null && 'insertedId' in result && result.insertedId) {
                 console.log("Booking successful:", result);
                 router.push('/browse-equipments');
             }

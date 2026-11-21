@@ -53,7 +53,7 @@ export default function RegisterPage() {
             role: "customer" | "owner" | "admin"
         }
         console.log("Register form data:", user)
-        const { data, error } = await authClient.signUp.email({
+        const { error } = await authClient.signUp.email({
             name: user.fullName,
             email: user.email,
             password: user.password,

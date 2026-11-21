@@ -36,7 +36,7 @@ const menuItemsByRole: Record<DashboardRole, DashboardMenuItem[]> = {
         {
             id: "customer-rentals",
             name: "My Rentals",
-            url: "/dashboard/customer/rentals",
+            url: "/dashboard/customer/bookings",
             icon: CalendarDays,
         },
         {

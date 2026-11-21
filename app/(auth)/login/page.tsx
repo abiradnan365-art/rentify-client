@@ -1,15 +1,22 @@
 "use client"
 
-import { useState, type FormEvent } from "react"
+import { Suspense, useState, type FormEvent } from "react"
 import Link from "next/link"
 import { authClient } from "@/lib/auth-client"
-import { redirect, useSearchParams } from "next/navigation"
-
-
+import { useRouter, useSearchParams } from "next/navigation"
 
 export default function LoginPage() {
+    return (
+        <Suspense fallback={null}>
+            <LoginForm />
+        </Suspense>
+    )
+}
+
+function LoginForm() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const router = useRouter()
     const searchParams = useSearchParams();
     const redirectTo = searchParams.get("redirectTo") || "/";
     console.log("Redirecting to:", redirectTo);
@@ -18,14 +25,14 @@ export default function LoginPage() {
         event.preventDefault()
         const formData = new FormData(event.currentTarget)
         const user = Object.fromEntries(formData.entries()) as { email: string; password: string }
-        const { data, error } = await authClient.signIn.email({
+        const { error } = await authClient.signIn.email({
             email: user.email,
             password: user.password,
         })
         if (error) {
             console.error("Error signing in:", error)
         } else {
-            redirect(redirectTo)
+            router.push(redirectTo)
         }
         console.log("Login form data:", user)
     }

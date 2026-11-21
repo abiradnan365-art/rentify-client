@@ -1,6 +1,5 @@
 "use client"
 import Image from "next/image"
-import Link from "next/link"
 import { ChevronRight, Heart, ImageOff, MapPin } from "lucide-react"
 
 import { Button } from "@/components/ui/button"

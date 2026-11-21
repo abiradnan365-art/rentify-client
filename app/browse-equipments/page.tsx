@@ -3,7 +3,6 @@ import { EquipmentBrowseCard } from "@/components/equipment/equipment-browse-car
 import { EquipmentFilterBar } from "@/components/equipment/equipment-filter-bar"
 import { getEquipments } from "@/lib/api/jobs"
 import type { Equipment } from "@/types/equipment"
-import Link from "next/link"
 
 
 type BrowseEquipmentsPageProps = {
