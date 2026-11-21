@@ -58,7 +58,7 @@ export function Navbar() {
           ))}
           {session?.user && (
             <Link
-              href={`dashboard/${session.user.role}`}
+              href={`/dashboard/${session.user.role}`}
               className="text-sm font-medium text-muted-foreground transition-colors hover:text-teal-600"
             >
               Dashboard

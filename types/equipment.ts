@@ -8,6 +8,14 @@ export const EQUIPMENT_CATEGORIES = [
   "Photography Equipment",
   "Vehicles & Transportation",
   "Agriculture Equipment",
+  "Electronics & Technology",
+  "Medical Equipment",
+  "Industrial Equipment",
+  "Sports & Fitness Equipment",
+  "Musical Instruments",
+  "Camping & Outdoor Equipment",
+  "Tools & Machinery",
+  "Party & Event Supplies",
   "Event & AV Equipment",
 ] as const
 
