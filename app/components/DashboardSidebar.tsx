@@ -11,7 +11,6 @@ import {
     User,
     Users,
 } from "lucide-react"
-import type { LucideIcon } from "lucide-react"
 
 import {
     Sidebar,
@@ -24,15 +23,7 @@ import {
     SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { useSession } from "@/lib/auth-client"
-
-type DashboardRole = "customer" | "owner" | "admin"
-
-type DashboardMenuItem = {
-    id: string
-    name: string
-    url: string
-    icon: LucideIcon
-}
+import type { DashboardMenuItem, DashboardRole } from "@/types/dashboard"
 
 const menuItemsByRole: Record<DashboardRole, DashboardMenuItem[]> = {
     customer: [

@@ -1,6 +1,9 @@
 import Link from "next/link"
 import { Plus } from "lucide-react"
 
+import { EquipmentActions } from "@/components/equipment/equipment-actions"
+import { EquipmentCard } from "@/components/equipment/equipment-card"
+import { EquipmentStatusBadge } from "@/components/equipment/equipment-status-badge"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import {
@@ -11,73 +14,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { cn } from "@/lib/utils"
 import { getEquipments } from "@/lib/api/jobs"
-import { DeleteEquipmentDialog } from "@/app/components/DeleteEquipmentDialog"
+import { cn } from "@/lib/utils"
+import type { Equipment } from "@/types/equipment"
 
-type EquipmentStatus = "Approved" | "Pending"
-
-export type Equipment = {
-  _id: string
-  name: string
-  category: string
-  rentalPrice: number
-  rentalType: "Hourly" | "Daily" | "Weekly" | "Monthly"
-  quantity: number
-  status: EquipmentStatus
-}
-
-function StatusBadge({ status }: { status: EquipmentStatus }) {
-  return (
-    <span
-      className={cn(
-        "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold",
-        status === "Approved"
-          ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-          : "border-amber-200 bg-amber-50 text-amber-700"
-      )}
-    >
-      {status}
-    </span>
-  )
-}
-
-function EquipmentActions({
-  equipment,
-  layout = "stacked",
-}: {
-  equipment: Equipment
-  layout?: "stacked" | "inline"
-}) {
-  return (
-    <div className="flex items-center gap-2">
-      <Button type="button" variant="secondary" size="sm" className="px-3">
-        View
-      </Button>
-
-      <div
-        className={cn(
-          "flex gap-1",
-          layout === "stacked" ? "flex-col" : "flex-row"
-        )}
-      >
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          className="border-amber-300 bg-amber-50 px-3 text-amber-800 hover:bg-amber-100 hover:text-amber-900"
-        >
-          Update
-        </Button>
-        <DeleteEquipmentDialog equipment={equipment} />
-      </div>
-    </div>
-  )
-}
+const tableHeadClass =
+  "h-11 text-[11px] font-bold tracking-[0.08em] text-muted-foreground uppercase"
 
 const ManageEquipmentsPage = async () => {
-  const equipment: Equipment[] = await getEquipments({})
-  console.log("Fetched equipment:", equipment)
+  const equipment: Equipment[] = await getEquipments()
 
   return (
     <div className="p-4 sm:p-6 lg:p-8">
@@ -106,22 +51,16 @@ const ManageEquipmentsPage = async () => {
           <Table className="min-w-[620px]">
             <TableHeader className="bg-muted/60">
               <TableRow className="hover:bg-transparent">
-                <TableHead className="h-11 pl-3 text-[11px] font-bold tracking-[0.08em] text-muted-foreground uppercase">
+                <TableHead className={cn(tableHeadClass, "pl-3")}>
                   Equipment
                 </TableHead>
-                <TableHead className="h-11 text-[11px] font-bold tracking-[0.08em] text-muted-foreground uppercase">
-                  Category
-                </TableHead>
-                <TableHead className="h-11 text-[11px] font-bold tracking-[0.08em] text-muted-foreground uppercase">
-                  Price
-                </TableHead>
-                <TableHead className="h-11 text-[11px] font-bold tracking-[0.08em] text-muted-foreground uppercase">
-                  Qty
-                </TableHead>
-                <TableHead className="h-11 text-[11px] font-bold tracking-[0.08em] text-muted-foreground uppercase">
-                  Status
-                </TableHead>
-                <TableHead className="h-11 pr-3 text-right text-[11px] font-bold tracking-[0.08em] text-muted-foreground uppercase">
+                <TableHead className={tableHeadClass}>Category</TableHead>
+                <TableHead className={tableHeadClass}>Price</TableHead>
+                <TableHead className={tableHeadClass}>Qty</TableHead>
+                <TableHead className={tableHeadClass}>Status</TableHead>
+                <TableHead
+                  className={cn(tableHeadClass, "pr-3 text-right")}
+                >
                   Actions
                 </TableHead>
               </TableRow>
@@ -147,7 +86,7 @@ const ManageEquipmentsPage = async () => {
                   <TableCell className="py-5">{item.quantity}</TableCell>
 
                   <TableCell className="py-5">
-                    <StatusBadge status={item.status} />
+                    <EquipmentStatusBadge status={item.status} />
                   </TableCell>
 
                   <TableCell className="py-4 pr-3">
@@ -163,33 +102,7 @@ const ManageEquipmentsPage = async () => {
 
         <div className="mt-6 space-y-3 lg:hidden">
           {equipment.map((item) => (
-            <div
-              key={item._id}
-              className="rounded-lg border border-border p-4"
-            >
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <p className="font-bold">{item.name}</p>
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    {item.category}
-                  </p>
-                </div>
-                <StatusBadge status={item.status} />
-              </div>
-
-              <div className="mt-3 flex items-center justify-between text-sm">
-                <span className="font-bold text-teal-700">
-                  ${item.rentalPrice}/{item.rentalType}
-                </span>
-                <span className="text-muted-foreground">
-                  Qty: {item.quantity}
-                </span>
-              </div>
-
-              <div className="mt-3 flex justify-end">
-                <EquipmentActions equipment={item} layout="inline" />
-              </div>
-            </div>
+            <EquipmentCard key={item._id} equipment={item} />
           ))}
         </div>
       </Card>

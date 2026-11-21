@@ -12,8 +12,8 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
+import { FormField } from "@/components/form-field"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import {
     Select,
     SelectContent,
@@ -27,16 +27,11 @@ import Image from "next/image"
 import { createEquipment } from "@/lib/actions/jobs"
 import { useRouter } from "next/navigation"
 import { toast } from "@/components/ui/toast"
-
-const categories = [
-    "Construction Equipment",
-    "Photography Equipment",
-    "Vehicles & Transportation",
-    "Agriculture Equipment",
-    "Event & AV Equipment",
-]
-
-const rentalTypes = ["Hourly", "Daily", "Weekly", "Monthly"]
+import {
+    EQUIPMENT_CATEGORIES,
+    RENTAL_TYPES,
+    type UploadedImage,
+} from "@/types/equipment"
 
 const fieldClass =
     "h-9 w-full rounded-md border-border bg-muted/40 shadow-none"
@@ -46,12 +41,6 @@ const API_URL =
 
 const MAX_IMAGES = 6
 const MAX_FILE_SIZE = 10 * 1024 * 1024
-
-type UploadedImage = {
-    id: string
-    name: string
-    url: string
-}
 
 export default function NewEquipmentPage() {
     const router = useRouter();
@@ -215,64 +204,49 @@ export default function NewEquipmentPage() {
                         onSubmit={handleSubmit}
                         className="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2 lg:grid-cols-3"
                     >
-                        <div className="space-y-2">
-                            <Label htmlFor="name" className="text-sm font-semibold">
-                                Equipment Name
-                            </Label>
+                        <FormField htmlFor="name" label="Equipment Name">
                             <Input
                                 id="name"
                                 name="name"
                                 placeholder="e.g. Bobcat S565 Skid-Steer Loader"
                                 className={fieldClass}
                             />
-                        </div>
+                        </FormField>
 
-                        <div className="space-y-2">
-                            <Label htmlFor="category" className="text-sm font-semibold">
-                                Category
-                            </Label>
+                        <FormField htmlFor="category" label="Category">
                             <Select name="category" defaultValue="Construction Equipment">
                                 <SelectTrigger id="category" className={fieldClass}>
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    {categories.map((category) => (
+                                    {EQUIPMENT_CATEGORIES.map((category) => (
                                         <SelectItem key={category} value={category}>
                                             {category}
                                         </SelectItem>
                                     ))}
                                 </SelectContent>
                             </Select>
-                        </div>
+                        </FormField>
 
-                        <div className="space-y-2">
-                            <Label htmlFor="brand" className="text-sm font-semibold">
-                                Brand
-                            </Label>
+                        <FormField htmlFor="brand" label="Brand">
                             <Input
                                 id="brand"
                                 name="brand"
                                 placeholder="e.g. Bobcat"
                                 className={fieldClass}
                             />
-                        </div>
+                        </FormField>
 
-                        <div className="space-y-2">
-                            <Label htmlFor="model" className="text-sm font-semibold">
-                                Model
-                            </Label>
+                        <FormField htmlFor="model" label="Model">
                             <Input
                                 id="model"
                                 name="model"
                                 placeholder="e.g. S565 M-Series"
                                 className={fieldClass}
                             />
-                        </div>
+                        </FormField>
 
-                        <div className="space-y-2">
-                            <Label htmlFor="rentalPrice" className="text-sm font-semibold">
-                                Rental Price (USD)
-                            </Label>
+                        <FormField htmlFor="rentalPrice" label="Rental Price (USD)">
                             <Input
                                 id="rentalPrice"
                                 name="rentalPrice"
@@ -281,42 +255,33 @@ export default function NewEquipmentPage() {
                                 defaultValue={250}
                                 className={fieldClass}
                             />
-                        </div>
+                        </FormField>
 
-                        <div className="space-y-2">
-                            <Label htmlFor="rentalType" className="text-sm font-semibold">
-                                Rental Type
-                            </Label>
+                        <FormField htmlFor="rentalType" label="Rental Type">
                             <Select name="rentalType" defaultValue="Daily">
                                 <SelectTrigger id="rentalType" className={fieldClass}>
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    {rentalTypes.map((rentalType) => (
+                                    {RENTAL_TYPES.map((rentalType) => (
                                         <SelectItem key={rentalType} value={rentalType}>
                                             {rentalType}
                                         </SelectItem>
                                     ))}
                                 </SelectContent>
                             </Select>
-                        </div>
+                        </FormField>
 
-                        <div className="space-y-2">
-                            <Label htmlFor="location" className="text-sm font-semibold">
-                                Location Hub
-                            </Label>
+                        <FormField htmlFor="location" label="Location Hub">
                             <Input
                                 id="location"
                                 name="location"
                                 defaultValue="Dhaka"
                                 className={fieldClass}
                             />
-                        </div>
+                        </FormField>
 
-                        <div className="space-y-2">
-                            <Label htmlFor="quantity" className="text-sm font-semibold">
-                                Available Quantity
-                            </Label>
+                        <FormField htmlFor="quantity" label="Available Quantity">
                             <Input
                                 id="quantity"
                                 name="quantity"
@@ -325,19 +290,16 @@ export default function NewEquipmentPage() {
                                 defaultValue={2}
                                 className={fieldClass}
                             />
-                        </div>
+                        </FormField>
 
-                        <div className="space-y-2">
-                            <Label htmlFor="condition" className="text-sm font-semibold">
-                                Condition
-                            </Label>
+                        <FormField htmlFor="condition" label="Condition">
                             <Input
                                 id="condition"
                                 name="condition"
                                 defaultValue="Excellent"
                                 className={fieldClass}
                             />
-                        </div>
+                        </FormField>
 
                         <div className="rounded-lg border border-border bg-muted/20 p-5 sm:col-span-2 lg:col-span-3">
                             <div className="flex items-center justify-between gap-3">
@@ -428,48 +390,44 @@ export default function NewEquipmentPage() {
 
                             <Separator className="my-4" />
 
-                            <div className="space-y-2">
-                                <Label
-                                    htmlFor="imageUrls"
-                                    className="text-sm font-semibold"
-                                >
-                                    Or add additional image URLs manually (one per line)
-                                </Label>
+                            <FormField
+                                htmlFor="imageUrls"
+                                label="Or add additional image URLs manually (one per line)"
+                            >
                                 <Textarea
                                     id="imageUrls"
                                     name="imageUrls"
                                     placeholder="https://..."
                                     className="min-h-20 rounded-md border-border bg-background shadow-none"
                                 />
-                            </div>
+                            </FormField>
                         </div>
 
-                        <div className="space-y-2 sm:col-span-2 lg:col-span-3">
-                            <Label htmlFor="description" className="text-sm font-semibold">
-                                Description
-                            </Label>
+                        <FormField
+                            htmlFor="description"
+                            label="Description"
+                            className="sm:col-span-2 lg:col-span-3"
+                        >
                             <Textarea
                                 id="description"
                                 name="description"
                                 placeholder="Detailed technical specifications, attachments included..."
                                 className="min-h-28 rounded-md border-border bg-muted/40 shadow-none"
                             />
-                        </div>
+                        </FormField>
 
-                        <div className="space-y-2 sm:col-span-2 lg:col-span-3">
-                            <Label
-                                htmlFor="rentalTerms"
-                                className="text-sm font-semibold"
-                            >
-                                Rental Terms &amp; Conditions
-                            </Label>
+                        <FormField
+                            htmlFor="rentalTerms"
+                            label="Rental Terms & Conditions"
+                            className="sm:col-span-2 lg:col-span-3"
+                        >
                             <Textarea
                                 id="rentalTerms"
                                 name="rentalTerms"
                                 defaultValue="Standard damage waiver and operator certification required."
                                 className="min-h-24 rounded-md border-border bg-muted/40 shadow-none"
                             />
-                        </div>
+                        </FormField>
 
                         <Button
                             type="submit"

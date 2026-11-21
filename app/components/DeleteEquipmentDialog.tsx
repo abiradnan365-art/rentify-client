@@ -15,7 +15,7 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
-import { Equipment } from "../dashboard/owner/equipments/page"
+import type { Equipment } from "@/types/equipment"
 import { deleteEquipment } from "@/lib/actions/jobs"
 import { useState } from "react"
 import { toast } from "@/components/ui/toast"
