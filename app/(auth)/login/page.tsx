@@ -3,13 +3,16 @@
 import { useState, type FormEvent } from "react"
 import Link from "next/link"
 import { authClient } from "@/lib/auth-client"
-import { redirect } from "next/navigation"
+import { redirect, useSearchParams } from "next/navigation"
 
 
 
 export default function LoginPage() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const searchParams = useSearchParams();
+    const redirectTo = searchParams.get("redirectTo") || "/";
+    console.log("Redirecting to:", redirectTo);
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
@@ -22,7 +25,7 @@ export default function LoginPage() {
         if (error) {
             console.error("Error signing in:", error)
         } else {
-            redirect("/")
+            redirect(redirectTo)
         }
         console.log("Login form data:", user)
     }
@@ -30,6 +33,7 @@ export default function LoginPage() {
     const handleGoogleSignIn = async () => {
         const data = await authClient.signIn.social({
             provider: "google",
+             callbackURL: redirectTo,
         });
         console.log("Google sign-in data:", data);
     }

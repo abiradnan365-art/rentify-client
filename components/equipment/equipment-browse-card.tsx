@@ -1,3 +1,4 @@
+"use client"
 import Image from "next/image"
 import Link from "next/link"
 import { ChevronRight, Heart, ImageOff, MapPin } from "lucide-react"
@@ -5,10 +6,15 @@ import { ChevronRight, Heart, ImageOff, MapPin } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import type { Equipment } from "@/types/equipment"
+import { useRouter } from "next/navigation"
 
 export function EquipmentBrowseCard({ equipment }: { equipment: Equipment }) {
+  const router = useRouter();
   const image = equipment.images?.[0]
   const inStock = equipment.quantity > 0
+  const handleViewDetails = (equipment: Equipment) => {
+    router.push(`/browse-equipments/${equipment._id}`);
+  }
 
   return (
     <article className="flex flex-col overflow-hidden rounded-xl border border-border bg-card shadow-sm">
@@ -90,10 +96,7 @@ export function EquipmentBrowseCard({ equipment }: { equipment: Equipment }) {
           </p>
 
           <Button
-            render={
-              <Link href={`/browse-equipments/${equipment._id}`} />
-            }
-            nativeButton={false}
+            onClick={() => handleViewDetails(equipment)}
             className="rounded-full bg-teal-600 px-4 text-white hover:bg-teal-700"
           >
             View Details

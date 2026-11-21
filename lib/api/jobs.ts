@@ -7,10 +7,8 @@ export const getEquipments = async (query?: string): Promise<Equipment[]> => {
     return res.json();
 }
 
-// The API exposes no single-equipment route, so look it up in the collection.
-export const getEquipmentById = async (
-    id: string
-): Promise<Equipment | undefined> => {
-    const equipments = await getEquipments();
-    return equipments.find((equipment) => equipment._id === id);
+
+export const getEquipmentById = async (equipmentId: string): Promise<Equipment | undefined> => {
+    const res = await fetch(`${BASE_URL}/equipments/${equipmentId}`);
+    return res.json();
 }

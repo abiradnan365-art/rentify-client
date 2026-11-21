@@ -12,6 +12,8 @@ import {
 import { Button } from "@/components/ui/button"
 import { getEquipmentById } from "@/lib/api/jobs"
 import { cn } from "@/lib/utils"
+import BookNow from "@/app/components/BookNow"
+
 
 type EquipmentDetailsPageProps = {
   params: Promise<{ id: string }>
@@ -26,7 +28,8 @@ function DetailStat({ label, value }: { label: string; value?: string }) {
   )
 }
 
-const EquipmentDetailsPage = async ({ params }: EquipmentDetailsPageProps) => {
+const EquipmentDetailsPage =async ({ params }: EquipmentDetailsPageProps) => {
+
   const { id } = await params
   const equipment = await getEquipmentById(id)
 
@@ -36,6 +39,7 @@ const EquipmentDetailsPage = async ({ params }: EquipmentDetailsPageProps) => {
 
   const image = equipment.images?.[0]
   const inStock = equipment.quantity > 0
+
 
   return (
     <div className="mx-auto w-full max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
@@ -144,12 +148,7 @@ const EquipmentDetailsPage = async ({ params }: EquipmentDetailsPageProps) => {
           ) : null}
 
           <div className="mt-5 grid grid-cols-[1fr_auto] gap-3">
-            <Button
-              type="button"
-              className="h-11 rounded-lg bg-teal-600 text-sm font-semibold text-white hover:bg-teal-700"
-            >
-              Book Now
-            </Button>
+           <BookNow equipment={equipment} session={null} />
             <Button
               type="button"
               variant="outline"
