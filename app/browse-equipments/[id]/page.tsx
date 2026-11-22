@@ -1,6 +1,8 @@
 import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
+import { getBookings } from "@/lib/api/bookings"
+import type { Booking } from "@/types/booking"
 import {
     ArrowLeft,
     CircleCheck,
@@ -42,8 +44,21 @@ const EquipmentDetailsPage = async ({ params }: EquipmentDetailsPageProps) => {
     }
     const session = await auth.api.getSession({ headers: await headers() })
     const user = session?.user
+
     const favorites = user ? await getFavorites(user.id) : []
     const isFavorited = favorites.some((f) => f._id === equipment._id)
+
+    let alreadyBooked = false
+    if (user?.role === "customer") {
+        const myBookings = (await getBookings()) as Booking[]
+        const today = new Date().toISOString().split("T")[0]
+        alreadyBooked = myBookings.some(
+            (b) =>
+                b.equipmentId === equipment._id &&
+                b.status !== "Cancelled" &&
+                String(b.endDate).slice(0, 10) >= today
+        )
+    }
 
     const image = equipment.images?.[0]
     const inStock = equipment.quantity > 0
@@ -156,7 +171,7 @@ const EquipmentDetailsPage = async ({ params }: EquipmentDetailsPageProps) => {
                     ) : null}
 
                     <div className="mt-5 grid grid-cols-[1fr_auto] gap-3">
-                        <BookNow equipment={equipment} />
+                        <BookNow equipment={equipment} alreadyBooked={alreadyBooked} />
                         <FavoriteButton
                             equipmentId={equipment._id}
                             initialFavorited={isFavorited}

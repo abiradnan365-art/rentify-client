@@ -15,11 +15,11 @@ type BookNowProps = {
         _id: string;
         name: string;
         rentalPrice?: number;
-        rentalType?: string; // "Daily" | "Weekly" | "Monthly"
+        rentalType?: string;
         quantity?: number;
     };
+    alreadyBooked?: boolean;
 };
-
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 const toLocalDateString = (d: Date) => {
@@ -32,7 +32,7 @@ const toLocalDateString = (d: Date) => {
 const inputClass =
     "mt-1 h-11 w-full rounded-lg border border-border bg-background px-3 text-sm font-normal text-foreground outline-none focus:border-teal-600 focus:ring-2 focus:ring-teal-600/20";
 
-const BookNow = ({ equipment }: BookNowProps) => {
+const BookNow = ({ equipment, alreadyBooked = false }: BookNowProps) => {
     const router = useRouter();
     const { data: session } = useSession();
     const user = session?.user;
@@ -75,6 +75,7 @@ const BookNow = ({ equipment }: BookNowProps) => {
     const totalAmount = units * rate * quantity;
 
     const handleOpen = () => {
+        if (alreadyBooked) return;
         if (!user) {
             router.push(`/login?redirectTo=/browse-equipments/${equipment._id}`);
             return;
@@ -94,13 +95,16 @@ const BookNow = ({ equipment }: BookNowProps) => {
     };
 
     const handleConfirm = () => {
-        if (!user) return;
+        if (!user || loading) return;
         if (totalDays === 0) return setError("Please select a valid rental period.");
         if (quantity < 1 || quantity > maxQty)
             return setError(`Quantity must be between 1 and ${maxQty}.`);
         if (!contactNumber.trim()) return setError("Contact number is required.");
         if (!deliveryAddress.trim())
             return setError("Delivery / site address is required.");
+
+        setLoading(true);
+        setError("");
 
         const booking = {
             equipmentId: equipment._id,
@@ -129,6 +133,7 @@ const BookNow = ({ equipment }: BookNowProps) => {
             router.push("/payment");
         } catch {
             setError("Something went wrong. Please try again.");
+            setLoading(false);
         }
     };
 
@@ -137,9 +142,10 @@ const BookNow = ({ equipment }: BookNowProps) => {
             <button
                 type="button"
                 onClick={handleOpen}
-                className="h-11 w-full rounded-lg bg-teal-600 px-5 text-sm font-semibold text-white hover:bg-teal-700"
+                disabled={alreadyBooked}
+                className="h-11 w-full rounded-lg bg-teal-600 px-5 text-sm font-semibold text-white hover:bg-teal-700 disabled:cursor-not-allowed disabled:opacity-60"
             >
-                Book Now
+                {alreadyBooked ? "Already Booked" : "Book Now"}
             </button>
 
             <Dialog open={open} onOpenChange={setOpen}>

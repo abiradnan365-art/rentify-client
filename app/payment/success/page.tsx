@@ -3,9 +3,11 @@ import { headers } from "next/headers";
 import Link from "next/link";
 import { stripe } from "@/lib/stripe";
 import { auth } from "@/lib/auth";
+import ClearPendingBooking from "@/app/components/ClearPendingBooking";
+
 
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
-const BOOKINGS_PATH = "/dashboard/customer/bookings"; 
+const BOOKINGS_PATH = "/dashboard/customer/bookings";
 
 export default async function PaymentSuccessPage({
   searchParams,
@@ -51,10 +53,40 @@ export default async function PaymentSuccessPage({
       stripeSessionId: s.id,
       paymentStatus: "Paid",
       status: "Confirmed",
-      ownerId: m.ownerId,
     }),
     cache: "no-store",
   });
+
+  if (res.status === 409) {
+    const paymentIntentId =
+      typeof s.payment_intent === "string" ? s.payment_intent : s.payment_intent?.id;
+
+    try {
+      if (paymentIntentId) {
+        await stripe.refunds.create({ payment_intent: paymentIntentId });
+      }
+    } catch {
+    
+    }
+
+    return (
+      <div className="mx-auto max-w-lg px-4 py-16 text-center">
+        <ClearPendingBooking />
+        <div className="rounded-2xl border border-amber-200 bg-amber-50/60 p-8">
+          <h1 className="text-xl font-black">Equipment no longer available</h1>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Someone booked it just before you. Your payment has been refunded.
+          </p>
+          <Link
+            href="/browse-equipments"
+            className="mt-5 inline-block text-sm text-teal-700 underline"
+          >
+            Browse other equipment
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   if (!res.ok) {
     return (
@@ -79,6 +111,7 @@ export default async function PaymentSuccessPage({
 
   return (
     <div className="mx-auto w-full max-w-lg px-4 py-16 text-center">
+      <ClearPendingBooking />
       <div className="rounded-2xl border border-teal-200 bg-teal-50/60 p-8">
         <p className="text-4xl">✅</p>
         <h1 className="mt-3 text-2xl font-black">Payment Successful</h1>
