@@ -10,9 +10,9 @@ import { Button } from "@base-ui/react"
 
 const links = [
   { label: "Home", href: "/", active: false },
-  { label: "About Us", href: "/about" },
+  { label: "About Us", href: "#" },
   { label: "All Equipment", href: "/browse-equipments" },
-  { label: "How It Works", href: "/how-it-works" },
+  { label: "How It Works", href: "#" },
 ]
 
 export function Navbar() {
@@ -69,7 +69,11 @@ export function Navbar() {
         {session?.user ? (
 
           <div className="hidden items-center gap-3 sm:flex">
-            <div className="flex items-center gap-2.5 rounded-full border border-slate-200 bg-slate-50/80 py-1 pr-4 pl-1.5 shadow-2xs">
+            <Link
+              href={`/dashboard/${session.user.role}/profile`}
+              aria-label="Go to profile"
+              className="group flex items-center gap-2.5 rounded-full border border-slate-200 bg-slate-50/80 py-1 pr-4 pl-1.5 shadow-2xs transition-colors hover:border-teal-300 hover:bg-teal-50/50 focus-visible:ring-2 focus-visible:ring-teal-500/40 focus-visible:outline-none"
+            >
               <Avatar className="size-9 border border-teal-500/50">
                 <AvatarImage
                   src={session.user.image ?? undefined}
@@ -82,14 +86,14 @@ export function Navbar() {
               </Avatar>
 
               <div className="flex flex-col leading-tight">
-                <span className="text-xs font-bold text-slate-800 sm:text-sm">
+                <span className="text-xs font-bold text-slate-800 transition-colors group-hover:text-teal-700 sm:text-sm">
                   {session.user.name}
                 </span>
                 <span className="text-[11px] font-semibold text-emerald-700">
                   {session.user.role ?? "Customer"}
                 </span>
               </div>
-            </div>
+            </Link>
 
 
             <Button

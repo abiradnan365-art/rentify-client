@@ -1,6 +1,4 @@
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
+import { requireRole } from "@/lib/core/server";
 import { getOwnerStats } from "@/lib/api/owner";
 
 function StatCard({
@@ -20,11 +18,9 @@ function StatCard({
   );
 }
 
+
 export default async function OwnerDashboardPage() {
-  const session = await auth.api.getSession({ headers: await headers() });
-  const user = session?.user;
-  if (!user) redirect("/login");
-  if (user.role !== "owner") redirect("/");
+  const user = await requireRole("owner");
 
   const stats = await getOwnerStats(user.id);
 

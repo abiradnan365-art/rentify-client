@@ -4,6 +4,7 @@ import { Suspense, useState, type FormEvent } from "react"
 import Link from "next/link"
 import { authClient } from "@/lib/auth-client"
 import { useRouter, useSearchParams } from "next/navigation"
+import { toast } from "@/components/ui/toast"
 
 export default function LoginPage() {
     return (
@@ -30,8 +31,15 @@ function LoginForm() {
             password: user.password,
         })
         if (error) {
-            console.error("Error signing in:", error)
+            toast.add({
+                title: "Login Failed",
+                description: "Invalid email or password. Please try again.",
+            })
         } else {
+            toast.add({
+                title: "Login Successful",
+                description: "You have successfully logged in.",
+            })
             router.push(redirectTo)
         }
         console.log("Login form data:", user)
@@ -40,7 +48,7 @@ function LoginForm() {
     const handleGoogleSignIn = async () => {
         const data = await authClient.signIn.social({
             provider: "google",
-             callbackURL: redirectTo,
+            callbackURL: redirectTo,
         });
         console.log("Google sign-in data:", data);
     }

@@ -6,6 +6,7 @@ import { ChevronDown, Circle } from "lucide-react"
 
 import { authClient } from "@/lib/auth-client"
 import { redirect } from "next/navigation"
+import { toast } from "@/components/ui/toast"
 
 const passwordHints = [
     "At least one uppercase letter (A-Z)",
@@ -61,8 +62,15 @@ export default function RegisterPage() {
             role: user.role,
         })
         if (error) {
-            console.error("Error signing up:", error)
+            toast.add({
+                title: "Registration Failed",
+                description: "An error occurred while registering. Please try again.",
+            })
         } else {
+            toast.add({
+                title: "Registration Successful",
+                description: "You have successfully registered.",
+            })
             redirect("/")
         }
     }
@@ -155,7 +163,6 @@ export default function RegisterPage() {
                         >
                             <option value="customer">Customer (Rent Equipment)</option>
                             <option value="owner">Owner (List Equipment)</option>
-                            <option value="admin">Admin (Platform Management)</option>
                         </select>
                         <ChevronDown className="pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2 text-muted-foreground" />
                     </div>

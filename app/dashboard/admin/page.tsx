@@ -1,5 +1,6 @@
-import { requireAdmin } from "@/lib/admin";
+
 import { getAdminStats } from "@/lib/api/admin";
+import { requireRole } from "@/lib/core/server";
 
 function StatCard({
   label,
@@ -19,7 +20,7 @@ function StatCard({
 }
 
 export default async function AdminDashboardPage() {
-  await requireAdmin();
+ await requireRole("admin");
   const stats = await getAdminStats();
 
   return (

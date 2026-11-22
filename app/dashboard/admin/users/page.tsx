@@ -1,9 +1,10 @@
-import { requireAdmin } from "@/lib/admin";
+
 import { getAllUsers } from "@/lib/api/admin";
 import RoleSelect from "@/app/components/RoleSelect";
+import { requireRole } from "@/lib/core/server";
 
 export default async function AdminUsersPage() {
-    const admin = await requireAdmin();
+    const admin = await requireRole("admin");
     const users = await getAllUsers();
 
     return (

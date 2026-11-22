@@ -1,6 +1,7 @@
 'use client'
 import { Trash2Icon } from "lucide-react"
 import { useRouter } from 'next/navigation'
+import { useState } from "react"
 
 import {
     AlertDialog,
@@ -15,27 +16,35 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
-import type { Equipment } from "@/types/equipment"
-import { deleteEquipment } from "@/lib/actions/jobs"
-import { useState } from "react"
 import { toast } from "@/components/ui/toast"
+import { deleteEquipment } from "@/lib/actions/equipments"
+import type { Equipment } from "@/types/equipment"
 
 export function DeleteEquipmentDialog({ equipment }: { equipment: Equipment }) {
+    const router = useRouter()
 
-    const router = useRouter();
+    const [open, setOpen] = useState(false)
+    const [deleting, setDeleting] = useState(false)
 
-    const [open, setOpen] = useState(false);
     const handleDelete = async () => {
-        const res = await deleteEquipment(equipment._id);
-        console.log("Deleting equipment:", equipment._id, res);
-        if (res.deletedCount) {
-            setOpen(false);
+        setDeleting(true)
+        const res = await deleteEquipment(equipment._id)
+        setDeleting(false)
+
+        if ("error" in res) {
             toast.add({
-                title: "Equipment Deleted",
-                description: "The equipment has been successfully deleted.",
+                title: "Delete failed",
+                description: String(res.error),
             })
-            router.refresh();
+            return
         }
+
+        setOpen(false)
+        toast.add({
+            title: "Equipment Deleted",
+            description: "The equipment has been successfully deleted.",
+        })
+        router.refresh()
     }
 
     return (
@@ -50,13 +59,21 @@ export function DeleteEquipmentDialog({ equipment }: { equipment: Equipment }) {
                     </AlertDialogMedia>
                     <AlertDialogTitle>Delete Equipment?</AlertDialogTitle>
                     <AlertDialogDescription>
-                        This will permanently delete this equipment. View{" "}
-                        <a href="#">Settings</a> delete any memories saved during this chat.
+                        This will permanently delete this equipment. This action
+                        cannot be undone.
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                    <AlertDialogCancel variant="outline">Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleDelete} variant="destructive">Delete</AlertDialogAction>
+                    <AlertDialogCancel variant="outline" disabled={deleting}>
+                        Cancel
+                    </AlertDialogCancel>
+                    <AlertDialogAction
+                        onClick={handleDelete}
+                        variant="destructive"
+                        disabled={deleting}
+                    >
+                        {deleting ? "Deleting..." : "Delete"}
+                    </AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>

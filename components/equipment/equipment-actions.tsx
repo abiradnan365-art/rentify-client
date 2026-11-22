@@ -2,6 +2,8 @@ import { DeleteEquipmentDialog } from "@/app/components/DeleteEquipmentDialog"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import type { Equipment } from "@/types/equipment"
+import Link from "next/link"
+import { UpdateEquipmentDialog } from "./update-equipment-dialog"
 
 type EquipmentActionsProps = {
   equipment: Equipment
@@ -14,9 +16,13 @@ export function EquipmentActions({
 }: EquipmentActionsProps) {
   return (
     <div className="flex items-center gap-2">
-      <Button type="button" variant="secondary" size="sm" className="px-3">
+      <Link
+        href={`/browse-equipments/${equipment._id}`}
+        className="flex h-9 items-center rounded-lg bg-muted px-4 text-sm font-medium hover:bg-muted/70"
+      >
         View
-      </Button>
+      </Link>
+       
 
       <div
         className={cn(
@@ -24,14 +30,7 @@ export function EquipmentActions({
           layout === "stacked" ? "flex-col" : "flex-row"
         )}
       >
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          className="border-amber-300 bg-amber-50 px-3 text-amber-800 hover:bg-amber-100 hover:text-amber-900"
-        >
-          Update
-        </Button>
+       <UpdateEquipmentDialog equipment={equipment} />
         <DeleteEquipmentDialog equipment={equipment} />
       </div>
     </div>

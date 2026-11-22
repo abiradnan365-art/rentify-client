@@ -24,7 +24,7 @@ export default async function CustomerDashboardPage() {
   const session = await auth.api.getSession({ headers: await headers() });
   const user = session?.user;
   if (!user) redirect("/login");
-  if (user.role !== "customer") redirect("/");
+//   if (user.role !== "customer") redirect("/");
 
   const stats = await getCustomerStats(user.id);
 

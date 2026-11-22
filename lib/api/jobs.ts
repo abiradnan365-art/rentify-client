@@ -16,7 +16,10 @@ export const getEquipmentById = async (equipmentId: string): Promise<Equipment |
 export const getEquipmentsByOwner = async (ownerId: string): Promise<Equipment[]> => {
   const params = new URLSearchParams({ ownerId });
 
-  const res = await fetch(`${BASE_URL}/equipments?${params}`, {
+  const res = await fetch(`${BASE_URL}/owner/equipments?${params}`, {
+    headers: {
+      "x-internal-key": process.env.INTERNAL_API_KEY || "",
+    },
     cache: "no-store",
   });
   if (!res.ok) return [];

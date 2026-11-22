@@ -17,19 +17,16 @@ import {
 import { getEquipmentsByOwner } from "@/lib/api/jobs"
 import { cn } from "@/lib/utils"
 import type { Equipment } from "@/types/equipment"
-import { auth } from "@/lib/auth"
-import { headers } from "next/headers"
-import { redirect } from "next/navigation"
+
+import { requireRole } from "@/lib/core/server"
 
 const tableHeadClass =
   "h-11 text-[11px] font-bold tracking-[0.08em] text-muted-foreground uppercase"
 
 const ManageEquipmentsPage = async () => {
-  const session = await auth.api.getSession({ headers: await headers() })
-  const user = session?.user
-  if (!user) redirect("/login")
+  const user = await requireRole("owner")
 
-  const equipment: Equipment[] = await getEquipmentsByOwner(user.id)
+const equipment: Equipment[] = await getEquipmentsByOwner(user.id)
 
   return (
     <div className="p-4 sm:p-6 lg:p-8">
