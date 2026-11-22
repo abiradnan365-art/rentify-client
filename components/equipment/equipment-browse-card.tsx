@@ -36,13 +36,7 @@ export function EquipmentBrowseCard({ equipment }: { equipment: Equipment }) {
           {equipment.category}
         </span>
 
-        <button
-          type="button"
-          aria-label={`Save ${equipment.name} to favorites`}
-          className="absolute top-3 right-3 flex size-8 items-center justify-center rounded-full bg-white/90 text-muted-foreground shadow-sm transition-colors hover:text-rose-500"
-        >
-          <Heart className="size-4" />
-        </button>
+     
 
         <span
           className={cn(

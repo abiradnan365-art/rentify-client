@@ -25,6 +25,7 @@ export type EquipmentStatus = "Approved" | "Pending"
 export type EquipmentOwner = {
   name: string
   email: string
+  id: string
 }
 
 export type Equipment = {
@@ -42,6 +43,7 @@ export type Equipment = {
   description?: string
   rentalTerms?: string
   images?: string[]
+  ownerId?: string
   owner?: EquipmentOwner
   status: EquipmentStatus
   createdAt?: string

@@ -12,3 +12,13 @@ export const getEquipmentById = async (equipmentId: string): Promise<Equipment |
     const res = await fetch(`${BASE_URL}/equipments/${equipmentId}`);
     return res.json();
 }
+
+export const getEquipmentsByOwner = async (ownerId: string): Promise<Equipment[]> => {
+  const params = new URLSearchParams({ ownerId });
+
+  const res = await fetch(`${BASE_URL}/equipments?${params}`, {
+    cache: "no-store",
+  });
+  if (!res.ok) return [];
+  return res.json();
+};

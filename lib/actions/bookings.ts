@@ -5,6 +5,7 @@ interface BookingData {
     [key: string]: unknown;
 }
 
+
 export async function bookingToAEquipment(data: BookingData): Promise<unknown> {
     const res = await fetch(`${BASE_URL}/bookings`, {
         method: "POST",

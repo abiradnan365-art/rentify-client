@@ -100,7 +100,7 @@ const menuItemsByRole: Record<DashboardRole, DashboardMenuItem[]> = {
         {
             id: "admin-equipment",
             name: "All Equipment",
-            url: "/dashboard/admin/equipment",
+            url: "/dashboard/admin/equipments",
             icon: Package,
         },
         {

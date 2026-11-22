@@ -19,13 +19,20 @@ export type Booking = {
   equipmentName: string
   equipmentImage?: string
   userId: string
+  ownerId?: string
   customerName: string
   customerEmail: string
+  contactNumber?: string
+  deliveryAddress?: string
+  notes?: string
   rentalType: RentalType
   startDate: string
   endDate: string
   bookedAt: string
+  quantity?: number
+  totalDays?: number
   totalAmount: number
+  stripeSessionId?: string
   paymentStatus: PaymentStatus
   status: BookingStatus
 }

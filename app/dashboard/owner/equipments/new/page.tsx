@@ -1,6 +1,7 @@
 
 "use client"
 
+import { createEquipment } from "@/lib/actions/equipments"
 import { useState, type FormEvent, type ChangeEvent } from "react"
 import { ImagePlus, Upload, X, Loader2 } from "lucide-react"
 
@@ -24,7 +25,7 @@ import {
 import { Separator } from "@/components/ui/separator"
 import { Textarea } from "@/components/ui/textarea"
 import Image from "next/image"
-import { createEquipment } from "@/lib/actions/jobs"
+
 import { useRouter } from "next/navigation"
 import { toast } from "@/components/ui/toast"
 import {
@@ -43,7 +44,7 @@ const MAX_IMAGES = 6
 const MAX_FILE_SIZE = 10 * 1024 * 1024
 
 export default function NewEquipmentPage() {
-    const router = useRouter();
+    const router = useRouter()
     const [uploadedImages, setUploadedImages] = useState<UploadedImage[]>([])
     const [uploading, setUploading] = useState(false)
     const [error, setError] = useState("")
@@ -154,7 +155,7 @@ export default function NewEquipmentPage() {
         delete fields.images
         delete fields.imageUrls
 
-        const data = {
+        const values = {
             ...fields,
             rentalPrice: Number(fields.rentalPrice),
             quantity: Number(fields.quantity),
@@ -164,27 +165,30 @@ export default function NewEquipmentPage() {
         }
 
         try {
-            const result = await createEquipment(data)
+            const result = await createEquipment(values)
 
-            if (!result?.success) {
-                  toast.add({
-                title: "Equipment Submitted",
-                description: "The equipment has been submitted for review.",
-            })
+            if (result?.success) {
+                toast.add({
+                    title: "Equipment Submitted",
+                    description: "The equipment has been submitted for review.",
+                })
 
-            router.push("/dashboard/owner/equipments")
-               
+                router.push("/dashboard/owner/equipments")
+            } else {
+                toast.add({
+                    title: "Submission Failed",
+                    description: result?.message || "Please try again.",
+                })
             }
-
         } catch (error) {
             console.error("Create equipment error:", error)
+
             toast.add({
                 title: "Something went wrong",
                 description: "Please try again.",
             })
         }
     }
-
 
     return (
         <div className="w-full p-3 sm:p-5 lg:p-6">
@@ -315,10 +319,11 @@ export default function NewEquipmentPage() {
 
                             <label
                                 htmlFor="images"
-                                className={`mt-3 flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-border bg-background px-6 py-10 text-center transition-colors hover:border-teal-400 hover:bg-teal-50/30 ${uploadedImages.length >= MAX_IMAGES || uploading
-                                    ? "cursor-not-allowed opacity-60"
-                                    : "cursor-pointer"
-                                    }`}
+                                className={`mt-3 flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-border bg-background px-6 py-10 text-center transition-colors hover:border-teal-400 hover:bg-teal-50/30 ${
+                                    uploadedImages.length >= MAX_IMAGES || uploading
+                                        ? "cursor-not-allowed opacity-60"
+                                        : "cursor-pointer"
+                                }`}
                             >
                                 <span className="flex size-10 items-center justify-center rounded-full border border-border bg-background text-orange-500 shadow-sm">
                                     {uploading ? (
@@ -437,7 +442,6 @@ export default function NewEquipmentPage() {
                         >
                             Submit Equipment For Approval
                         </Button>
-
                     </form>
                 </CardContent>
             </Card>
