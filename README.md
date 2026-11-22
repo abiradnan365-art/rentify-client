@@ -1,21 +1,36 @@
-# Next.js template
+# Rentify – Equipment Rental Platform
 
-This is a Next.js template with shadcn/ui.
+## Project Purpose
+Rentify is an equipment rental platform where equipment owners can list their equipment for rent, and customers can browse, book, and rent equipment for a specific period with secure online payments.
 
-## Adding components
+## Live URL
+https://rentify-client-bice.vercel.app/
 
-To add components to your app, run the following command:
+## Backend URL
+https://rentify-server-six.vercel.app/
 
-```bash
-npx shadcn@latest add button
-```
+## Key Features
+- User registration and login with email/password.
+- Google authentication.
+- Role-based access control (Customer, Owner, Admin).
+- Browse, search, filter, and sort equipment.
+- View detailed equipment information.
+- Add and manage favorite equipment.
+- Book equipment for specific rental periods.
+- Secure online payments using Stripe.
+- Customer rental management.
+- Owner equipment and rental management.
+- Admin user, equipment, and booking management.
+- Dashboard analytics.
 
-This will place the ui components in the `components` directory.
+## NPM Packages Used
+- Next.js
+- React
+- TypeScript
+- Express.js
+- MongoDB
+- Better Auth
+- Tailwind CSS
+- shadcn/ui
+- Stripe
 
-## Using components
-
-To use the components in your app, import them as follows:
-
-```tsx
-import { Button } from "@/components/ui/button";
-```
