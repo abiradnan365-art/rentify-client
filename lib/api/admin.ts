@@ -14,6 +14,15 @@ export type AdminUser = {
   createdAt?: string;
 };
 
+export type AdminStats = {
+  totalUsers: number;
+  totalEquipment: number;
+  totalBookings: number;
+  pendingApprovals: number;
+  completedRentals: number;
+  totalRevenue: number;
+};
+
 export const getAllUsers = async (): Promise<AdminUser[]> => {
   const res = await fetch(`${BASE_URL}/admin/users`, { headers, cache: "no-store" });
   if (!res.ok) return [];
@@ -31,5 +40,23 @@ export const getAllEquipmentsForAdmin = async (): Promise<Equipment[]> => {
     cache: "no-store",
   });
   if (!res.ok) return [];
+  return res.json();
+};
+
+export const getAdminStats = async (): Promise<AdminStats> => {
+  const res = await fetch(`${BASE_URL}/admin/stats`, {
+    headers,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    return {
+      totalUsers: 0,
+      totalEquipment: 0,
+      totalBookings: 0,
+      pendingApprovals: 0,
+      completedRentals: 0,
+      totalRevenue: 0,
+    };
+  }
   return res.json();
 };
