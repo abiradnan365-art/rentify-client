@@ -38,7 +38,7 @@ export function Banner() {
 
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
             <Link
-              href="/equipment"
+              href="/browse-equipments"
               className={cn(
                 buttonVariants({ size: "lg" }),
                 "h-12 gap-2 rounded-lg bg-teal-600 px-6 text-sm font-semibold text-white hover:bg-teal-700"
@@ -48,7 +48,7 @@ export function Banner() {
               <ArrowRight className="size-4" />
             </Link>
             <Link
-              href="/list-equipment"
+              href="#"
               className={cn(
                 buttonVariants({ variant: "outline", size: "lg" }),
                 "h-12 rounded-lg border-border bg-background px-6 text-sm font-semibold hover:bg-muted"
