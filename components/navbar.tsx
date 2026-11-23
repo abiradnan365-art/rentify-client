@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState } from "react"
@@ -11,17 +12,17 @@ import { Button } from "@base-ui/react"
 const links = [
   { label: "Home", href: "/", active: false },
   { label: "About Us", href: "#" },
-  { label: "All Equipment", href: "/browse-equipments" },
+  { label: "All Equipment", href: "/browse-equipments", active: false },
   { label: "How It Works", href: "#" },
 ]
 
 export function Navbar() {
-
   const [open, setOpen] = useState(false)
   const { data: session } = authClient.useSession()
-  console.log("Session data:", session)
+
   const handleLogout = async () => {
     await authClient.signOut()
+    setOpen(false)
   }
 
   return (
@@ -35,6 +36,7 @@ export function Navbar() {
           <span className="flex size-11 items-center justify-center rounded-xl bg-teal-600 text-white ring-1 ring-teal-700/20">
             <HardHat className="size-6" strokeWidth={2.5} />
           </span>
+
           <span className="flex flex-col leading-none">
             <span className="text-xl font-black tracking-tight">RENTIFY</span>
             <span className="mt-1 text-[10px] font-semibold tracking-[0.18em] text-muted-foreground">
@@ -56,6 +58,7 @@ export function Navbar() {
               {link.label}
             </Link>
           ))}
+
           {session?.user && (
             <Link
               href={`/dashboard/${session.user.role}`}
@@ -67,7 +70,6 @@ export function Navbar() {
         </nav>
 
         {session?.user ? (
-
           <div className="hidden items-center gap-3 sm:flex">
             <Link
               href={`/dashboard/${session.user.role}/profile`}
@@ -94,7 +96,6 @@ export function Navbar() {
                 </span>
               </div>
             </Link>
-
 
             <Button
               type="button"
@@ -167,22 +168,56 @@ export function Navbar() {
                 {link.label}
               </Link>
             ))}
+
+            {session?.user && (
+              <Link
+                href={`/dashboard/${session.user.role}`}
+                onClick={() => setOpen(false)}
+                className="rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-teal-600"
+              >
+                Dashboard
+              </Link>
+            )}
           </div>
-          <div className="mt-4 flex items-center gap-3 border-t border-border pt-4 sm:hidden">
-            <Link
-              href="/login"
-              onClick={() => setOpen(false)}
-              className="flex-1 rounded-lg border border-border px-4 py-2.5 text-center text-sm font-medium transition-colors hover:bg-muted"
-            >
-              Login
-            </Link>
-            <Link
-              href="/register"
-              onClick={() => setOpen(false)}
-              className="flex-1 rounded-lg bg-teal-600 px-4 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-teal-700"
-            >
-              Register
-            </Link>
+
+          <div className="mt-4 flex items-center gap-3 border-t border-border pt-4">
+            {session?.user ? (
+              <>
+                <Link
+                  href={`/dashboard/${session.user.role}/profile`}
+                  onClick={() => setOpen(false)}
+                  className="flex-1 rounded-lg border border-border px-4 py-2.5 text-center text-sm font-medium"
+                >
+                  Profile
+                </Link>
+
+                <Button
+                  type="button"
+                  onClick={handleLogout}
+                  className="flex-1 rounded-lg bg-red-50 px-4 py-2.5 text-sm font-semibold text-red-600 hover:bg-red-100"
+                >
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  onClick={() => setOpen(false)}
+                  className="flex-1 rounded-lg border border-border px-4 py-2.5 text-center text-sm font-medium transition-colors hover:bg-muted"
+                >
+                  Login
+                </Link>
+
+                <Link
+                  href="/register"
+                  onClick={() => setOpen(false)}
+                  className="flex-1 rounded-lg bg-teal-600 px-4 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-teal-700"
+                >
+                  Register
+                </Link>
+              </>
+            )}
           </div>
         </nav>
       )}
