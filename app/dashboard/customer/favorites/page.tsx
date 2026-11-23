@@ -1,17 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
 import { ImageOff } from "lucide-react";
-import { auth } from "@/lib/auth";
+import { requireRole } from "@/lib/core/server";
 import { getFavorites } from "@/lib/api/favorites";
 
 export default async function FavoritesPage() {
-  const session = await auth.api.getSession({ headers: await headers() });
-  const user = session?.user;
-  if (!user) redirect("/login");
+  await requireRole("customer");
 
-  const favorites = await getFavorites(user.id);
+  const favorites = await getFavorites();
 
   return (
     <div className="p-4 sm:p-6 lg:p-8">
@@ -46,6 +42,7 @@ export default async function FavoritesPage() {
                     </div>
                   )}
                 </div>
+
                 <div className="p-4">
                   <h3 className="truncate text-sm font-bold">{item.name}</h3>
                   <p className="mt-0.5 truncate text-xs text-muted-foreground">

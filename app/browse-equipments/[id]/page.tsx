@@ -45,7 +45,7 @@ const EquipmentDetailsPage = async ({ params }: EquipmentDetailsPageProps) => {
     const session = await auth.api.getSession({ headers: await headers() })
     const user = session?.user
 
-    const favorites = user ? await getFavorites(user.id) : []
+    const favorites = user ? await getFavorites() : []
     const isFavorited = favorites.some((f) => f._id === equipment._id)
 
     let alreadyBooked = false

@@ -1,4 +1,6 @@
+import "server-only";
 import type { Equipment } from "@/types/equipment"
+import { getToken } from "../core/server";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
@@ -13,15 +15,16 @@ export const getEquipmentById = async (equipmentId: string): Promise<Equipment |
     return res.json();
 }
 
-export const getEquipmentsByOwner = async (ownerId: string): Promise<Equipment[]> => {
-  const params = new URLSearchParams({ ownerId });
+export const getEquipmentsByOwner = async (): Promise<Equipment[]> => {
+  const token = await getToken();
 
-  const res = await fetch(`${BASE_URL}/owner/equipments?${params}`, {
+  const res = await fetch(`${BASE_URL}/owner/equipments`, {
     headers: {
-      "x-internal-key": process.env.INTERNAL_API_KEY || "",
+      Authorization: `Bearer ${token}`,
     },
     cache: "no-store",
   });
+
   if (!res.ok) return [];
   return res.json();
 };

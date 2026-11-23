@@ -26,7 +26,7 @@ export default async function CustomerDashboardPage() {
   if (!user) redirect("/login");
 //   if (user.role !== "customer") redirect("/");
 
-  const stats = await getCustomerStats(user.id);
+  const stats = await getCustomerStats();
 
   return (
     <div className="p-4 sm:p-6 lg:p-8">

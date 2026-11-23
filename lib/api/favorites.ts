@@ -1,14 +1,13 @@
 import "server-only";
+import { authFetch } from "@/lib/core/server";
 import type { Equipment } from "@/types/equipment";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
-export const getFavorites = async (userId: string): Promise<Equipment[]> => {
-  const params = new URLSearchParams({ userId });
-  const res = await fetch(`${BASE_URL}/favorites?${params}`, {
-    headers: { "x-internal-key": process.env.INTERNAL_API_KEY! },
-    cache: "no-store",
-  });
+export const getFavorites = async (): Promise<Equipment[]> => {
+  const res = await authFetch(`${BASE_URL}/favorites`);
+
   if (!res.ok) return [];
+
   return res.json();
 };

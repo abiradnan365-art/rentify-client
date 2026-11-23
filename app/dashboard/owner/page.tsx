@@ -22,7 +22,7 @@ function StatCard({
 export default async function OwnerDashboardPage() {
   const user = await requireRole("owner");
 
-  const stats = await getOwnerStats(user.id);
+  const stats = await getOwnerStats();
 
   return (
     <div className="p-4 sm:p-6 lg:p-8">

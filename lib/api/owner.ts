@@ -1,4 +1,5 @@
 import "server-only";
+import { getToken } from "../core/server";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
@@ -11,10 +12,13 @@ export type OwnerStats = {
   totalEarnings: number;
 };
 
-export const getOwnerStats = async (ownerId: string): Promise<OwnerStats> => {
-  const params = new URLSearchParams({ ownerId });
-  const res = await fetch(`${BASE_URL}/owner/stats?${params}`, {
-    headers: { "x-internal-key": process.env.INTERNAL_API_KEY! },
+export const getOwnerStats = async (): Promise<OwnerStats> => {
+  const token = await getToken();
+
+  const res = await fetch(`${BASE_URL}/owner/stats`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
     cache: "no-store",
   });
 
@@ -28,5 +32,6 @@ export const getOwnerStats = async (ownerId: string): Promise<OwnerStats> => {
       totalEarnings: 0,
     };
   }
+
   return res.json();
 };

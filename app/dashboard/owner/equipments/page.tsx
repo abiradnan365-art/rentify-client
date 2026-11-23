@@ -26,7 +26,7 @@ const tableHeadClass =
 const ManageEquipmentsPage = async () => {
   const user = await requireRole("owner")
 
-const equipment: Equipment[] = await getEquipmentsByOwner(user.id)
+const equipment: Equipment[] = await getEquipmentsByOwner()
 
   return (
     <div className="p-4 sm:p-6 lg:p-8">

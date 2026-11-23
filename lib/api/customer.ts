@@ -1,5 +1,5 @@
 import "server-only";
-
+import { getToken } from "../core/server";
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
 export type CustomerStats = {
@@ -11,10 +11,13 @@ export type CustomerStats = {
   favorites: number;
 };
 
-export const getCustomerStats = async (userId: string): Promise<CustomerStats> => {
-  const params = new URLSearchParams({ userId });
-  const res = await fetch(`${BASE_URL}/customer/stats?${params}`, {
-    headers: { "x-internal-key": process.env.INTERNAL_API_KEY! },
+export const getCustomerStats = async (): Promise<CustomerStats> => {
+  const token = await getToken();
+
+  const res = await fetch(`${BASE_URL}/customer/stats`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
     cache: "no-store",
   });
 
@@ -28,5 +31,6 @@ export const getCustomerStats = async (userId: string): Promise<CustomerStats> =
       favorites: 0,
     };
   }
+
   return res.json();
 };
